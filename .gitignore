@@ -11,3 +11,6 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+
+# Bootstrap (one-time infra)
+infra/bootstrap/
