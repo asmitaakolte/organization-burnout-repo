@@ -30,7 +30,7 @@ jobs:
         working-directory: infra/app
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -input=false
         working-directory: infra/app
 
-        
+

@@ -9,3 +9,7 @@ variable "github_org" {
 variable "github_repo" {
   description = "org-burnout-repo"
 }
+
+variable "project_name" {
+  default = "mlops-burnout"
+}
