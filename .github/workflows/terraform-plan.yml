@@ -1,36 +1,38 @@
-name: Terraform AWS Infra
+name: Terraform Plan
 
 on:
   pull_request:
     branches: [ main ]
-  push:
-    branches: [ main ]
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
-  terraform:
+  terraform-plan:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::<ACCOUNT_ID>:role/github-actions-terraform-role
+          aws-region: us-east-1
+
       - name: Terraform Init
         run: terraform init
-        working-directory: infra
+        working-directory: infra/app
 
       - name: Terraform Validate
         run: terraform validate
-        working-directory: infra
+        working-directory: infra/app
 
       - name: Terraform Plan
-        if: github.event_name == 'pull_request'
         run: terraform plan
-        working-directory: infra
-
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve
-        working-directory: infra
+        working-directory: infra/app
