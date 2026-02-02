@@ -4,7 +4,7 @@ data "archive_file" "lambda_zip" {
   output_path = "${path.module}/lambda.zip"
 }
 
-resource "aws_lambda_function" "org_burnout_lambda" {
+resource "aws_lambda_function" "burnout_lambda" {
   function_name = "org-burnout-processor"
   role          = aws_iam_role.lambda_exec_role.arn
   handler       = "handler.handler"
@@ -13,12 +13,6 @@ resource "aws_lambda_function" "org_burnout_lambda" {
   filename         = data.archive_file.lambda_zip.output_path
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
-  timeout = 30
+  timeout     = 30
   memory_size = 128
-
-  environment {
-    variables = {
-      PROJECT = "org-burnout"
-    }
-  }
 }

@@ -13,8 +13,9 @@ resource "aws_iam_role" "lambda_exec_role" {
   })
 }
 
-resource "aws_iam_policy" "lambda_logging_policy" {
-  name = "org-burnout-lambda-logging"
+# 2. IAM POLICY (WHAT it can do)
+resource "aws_iam_policy" "lambda_policy" {
+  name = "org-burnout-lambda-policy"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -23,14 +24,17 @@ resource "aws_iam_policy" "lambda_logging_policy" {
       Action = [
         "logs:CreateLogGroup",
         "logs:CreateLogStream",
-        "logs:PutLogEvents"
+        "logs:PutLogEvents",
+        "s3:PutObject",
+        "s3:GetObject"
       ]
       Resource = "*"
     }]
   })
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_logs_attach" {
+# 3. ATTACH POLICY TO ROLE (CONNECT WHO + WHAT)
+resource "aws_iam_role_policy_attachment" "lambda_policy_attach" {
   role       = aws_iam_role.lambda_exec_role.name
-  policy_arn = aws_iam_policy.lambda_logging_policy.arn
+  policy_arn = aws_iam_policy.lambda_policy.arn
 }
