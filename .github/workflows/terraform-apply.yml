@@ -33,4 +33,3 @@ jobs:
         run: terraform apply -auto-approve -input=false
         working-directory: infra/app
 
-
